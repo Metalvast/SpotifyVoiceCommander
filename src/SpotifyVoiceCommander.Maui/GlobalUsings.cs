@@ -1,0 +1,14 @@
+﻿global using ErrorOr;
+global using Etai.Blazor;
+global using Etai.Blazor.Maui;
+global using Etai.Core;
+global using Fluxor;
+global using Microsoft.AspNetCore.Components;
+global using SpotifyVoiceCommander.Maui.Shared.Lib;
+global using SpotifyVoiceCommander.Maui.Shared.Lib.ErrorOr;
+global using SpotifyVoiceCommander.Maui.Shared.Lib.Fluxor;
+global using SpotifyVoiceCommander.Maui.Shared.UI;
+global using SpotifyVoiceCommander.Shared;
+global using static SpotifyVoiceCommander.Maui.Shared.Lib.MauiAppServicesAccessor;
+global using BlazorDispatcher = Microsoft.AspNetCore.Components.Dispatcher;
+global using IDispatcher = Fluxor.IDispatcher;

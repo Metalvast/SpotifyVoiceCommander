@@ -1,0 +1,21 @@
+﻿@using Fluxor.Blazor.Web
+@using Microsoft.AspNetCore.Components.Authorization
+
+<StoreInitializer />
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(MauiProgram).Assembly"
+            AdditionalAssemblies="@Assemblies">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@LayoutComponent">
+                <NotAuthorized>
+                    @* <EtaiRedirectTo Uri="@(GetLoginUri())" /> *@
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+           <p>Not found page</p>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

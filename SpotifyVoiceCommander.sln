@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{F3E60206-AFCD-4B6E-92A9-986C1632E8E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.filenesting.json = .filenesting.json
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{A11788EB-F422-4D8F-9F12-1D430615D597}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyVoiceCommander.Api", "src\SpotifyVoiceCommander.Api\SpotifyVoiceCommander.Api.csproj", "{2F8E7E2F-04F0-4913-8814-FE3C7559B373}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyVoiceCommander.Maui", "src\SpotifyVoiceCommander.Maui\SpotifyVoiceCommander.Maui.csproj", "{23DE466D-4D5A-4B76-8886-E5EA3694F00F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotifyVoiceCommander.Shared", "src\SpotifyVoiceCommander.Shared\SpotifyVoiceCommander.Shared.csproj", "{73BE77AF-D90A-4EF7-87F1-EF858D86F744}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F8E7E2F-04F0-4913-8814-FE3C7559B373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8E7E2F-04F0-4913-8814-FE3C7559B373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8E7E2F-04F0-4913-8814-FE3C7559B373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8E7E2F-04F0-4913-8814-FE3C7559B373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{73BE77AF-D90A-4EF7-87F1-EF858D86F744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73BE77AF-D90A-4EF7-87F1-EF858D86F744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73BE77AF-D90A-4EF7-87F1-EF858D86F744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73BE77AF-D90A-4EF7-87F1-EF858D86F744}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2F8E7E2F-04F0-4913-8814-FE3C7559B373} = {A11788EB-F422-4D8F-9F12-1D430615D597}
+		{23DE466D-4D5A-4B76-8886-E5EA3694F00F} = {A11788EB-F422-4D8F-9F12-1D430615D597}
+		{73BE77AF-D90A-4EF7-87F1-EF858D86F744} = {A11788EB-F422-4D8F-9F12-1D430615D597}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C24556B-E72B-4534-9624-AC3FD92840DF}
+	EndGlobalSection
+EndGlobal
