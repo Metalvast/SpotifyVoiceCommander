@@ -1,5 +1,6 @@
 ﻿using SpotifyVoiceCommander.Maui.Entities.Viewer.Models;
 using SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Actions;
+using SpotifyVoiceCommander.Maui.Shared.Framework;
 using System.Security.Claims;
 
 namespace SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Effects;
@@ -22,6 +23,7 @@ internal class InitializeViewerEffect(IServiceProvider services) : BaseEffect<In
         {
             Viewer = viewer,
         }))
+        .ThenDo(_ => _navigationManager.NavigateToPlayer())
         .Else(errors => ShowErrorMessage(errors)
             .ThenDo(_ => Dispatch(new InitializeViewerFailureAction { }))
             .Then(_ => Error.Unauthorized())

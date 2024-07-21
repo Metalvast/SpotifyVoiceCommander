@@ -29,4 +29,6 @@ if (enableAuthentication)
     app.UseAuthorization();
 }
 
+app.MapReverseProxy();
+
 app.Run();

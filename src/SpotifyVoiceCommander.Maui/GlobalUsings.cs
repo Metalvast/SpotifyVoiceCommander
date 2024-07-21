@@ -7,6 +7,7 @@ global using Microsoft.AspNetCore.Components;
 global using SpotifyVoiceCommander.Maui.Shared.Lib;
 global using SpotifyVoiceCommander.Maui.Shared.Lib.ErrorOr;
 global using SpotifyVoiceCommander.Maui.Shared.Lib.Fluxor;
+global using SpotifyVoiceCommander.Maui.Shared.Resources;
 global using SpotifyVoiceCommander.Maui.Shared.UI;
 global using SpotifyVoiceCommander.Shared;
 global using static SpotifyVoiceCommander.Maui.Shared.Lib.MauiAppServicesAccessor;

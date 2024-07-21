@@ -3,7 +3,6 @@ using IdentityModel.OidcClient.Browser;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Http;
 using SpotifyVoiceCommander.Maui.Shared.Api.Lib;
-using SpotifyVoiceCommander.Maui.Shared.Resources;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Web;
@@ -43,11 +42,13 @@ public sealed class SpotifyClientWrapper(
 
     public async ValueTask InitializeAsync()
     {
+        await Task.Yield();
+
         var authInfoJson = await SecureStorage.GetAsync(SecureStorageKeys.AuthInfo);
         if (authInfoJson == null ||
-            JsonSerializer.Deserialize<PKCETokenResponse>(authInfoJson) is not { } authInfo ||
-            authInfo.IsExpired)
+            JsonSerializer.Deserialize<PKCETokenResponse>(authInfoJson) is not { } authInfo)
         {
+            OnAuthenticationStateChanged?.Invoke(AnonymousUser);
             return;
         }
 
@@ -68,14 +69,15 @@ public sealed class SpotifyClientWrapper(
         if (code == null)
             return Errors.InitializationFailed;
 
-        var initialResponse = await _oAuthClient.RequestToken(
+        var authInfo = await _oAuthClient.RequestToken(
             new PKCETokenRequest(
                 Constants.SpotifyClientId,
                 code,
                 new Uri(callbackUrl),
                 verifier),
             ct);
-        await InitializerSpotifyClientAsync(initialResponse);
+        await InitializerSpotifyClientAsync(authInfo);
+        await SetAuthInfo(authInfo);
 
         return Result.Success;
     }
@@ -136,7 +138,7 @@ public sealed class SpotifyClientWrapper(
         }.ToUri().ToString();
 
     private static string CreateCallbackUrl() =>
-        "spotifyvoicecommanderapp://callback";
+        "spotifyvoicecommanderapp://callback/";
 
     private static Task SetAuthInfo(PKCETokenResponse authInfo) =>
         SecureStorage.SetAsync(SecureStorageKeys.AuthInfo, JsonSerializer.Serialize(authInfo));
@@ -160,6 +162,7 @@ public sealed class SpotifyClientWrapper(
         };
         var claimsIdentity = new ClaimsIdentity(claims, "oauth2");
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
         OnAuthenticationStateChanged?.Invoke(claimsPrincipal);
     }
 

@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace SpotifyVoiceCommander.Maui.Shared.Framework;
 
-public class MauiAuthenticationStateProvider : AuthenticationStateProvider
+public class MauiAuthenticationStateProvider : AuthenticationStateProvider, IDisposable
 {
     #region Injects
 
@@ -35,7 +35,7 @@ public class MauiAuthenticationStateProvider : AuthenticationStateProvider
 
     #region Fields
 
-    private AuthenticationState _currentUser = new(new(new ClaimsIdentity()));
+    private AuthenticationState _currentUser = new(SpotifyClientWrapper.AnonymousUser);
     private TaskCompletionSource<AuthenticationState> _initialStateTaskSource = TaskCompletionSourceExt.New<AuthenticationState>();
 
     #endregion
@@ -79,7 +79,10 @@ public class MauiAuthenticationStateProvider : AuthenticationStateProvider
         void Notify()
         {
             NotifyAuthenticationStateChanged(authenticationStateTask);
-            _dispatcher.Dispatch(new InitializeViewerAction { AuthenticationStateTask = authenticationStateTask });
+            _dispatcher.Dispatch(new FluxorActionWrapper<InitializeViewerAction>
+            {
+                Action = new InitializeViewerAction { AuthenticationStateTask = authenticationStateTask },
+            });
         }
     }
 
@@ -91,6 +94,9 @@ public class MauiAuthenticationStateProvider : AuthenticationStateProvider
         _initialStateTaskSource.Task.Status is TaskStatus.WaitingForActivation
             ? _initialStateTaskSource.Task
             : Task.FromResult(_currentUser);
+
+    public void Dispose() =>
+        _spotifyClientWrapper.OnAuthenticationStateChanged -= OnAuthenticationStateChanged;
 
     #endregion
 }

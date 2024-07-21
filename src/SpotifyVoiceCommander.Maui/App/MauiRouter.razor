@@ -1,5 +1,6 @@
 ﻿@using Fluxor.Blazor.Web
 @using Microsoft.AspNetCore.Components.Authorization
+@using SpotifyVoiceCommander.Maui.Shared.Framework
 
 <StoreInitializer />
 
@@ -9,7 +10,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@LayoutComponent">
                 <NotAuthorized>
-                    @* <EtaiRedirectTo Uri="@(GetLoginUri())" /> *@
+                    <EtaiRedirectTo Uri="@_navigationManager.GetSignInUri("/")" />
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

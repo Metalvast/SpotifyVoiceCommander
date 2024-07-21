@@ -26,17 +26,23 @@ internal static class Configure
             .AddInternalApi()
             .AddSpotifyClientWrapper();
 
+        // Blazor
+
         // Authentication
         services
            .AddAuthorizationCore()
            .AddScoped<AuthenticationStateProvider, MauiAuthenticationStateProvider>()
            .AddScoped(sp => (MauiAuthenticationStateProvider)sp.GetRequiredService<AuthenticationStateProvider>());
 
-        // BlazorCircuitContext
+        // CircuitContext
         services
             .AddScoped(c => new MauiBlazorCircuitContext(c))
             .AddTransient(c => (BlazorCircuitContext)c.GetRequiredService<MauiBlazorCircuitContext>())
             .AddTransient(c => c.GetRequiredService<MauiBlazorCircuitContext>().Dispatcher);
+
+        // Other Blazor services
+
+        services.AddScoped<MauiBlazorNavigationManager>();
 
         // UI
         services
