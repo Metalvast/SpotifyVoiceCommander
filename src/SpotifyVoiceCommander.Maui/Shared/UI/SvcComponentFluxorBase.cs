@@ -1,5 +1,4 @@
 ﻿using ActualLab.Fusion.Blazor;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SpotifyVoiceCommander.Maui.Shared.Lib.Fluxor.Subscription;
 
@@ -26,8 +25,8 @@ public abstract class SvcComponentFluxorBase : SvcComponentBase, ISvcFluxorCompo
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        
-        _svcFluxorActionResolver.SetSubscriber(this);   
+
+        _svcFluxorActionResolver.SetSubscriber(this);
     }
 
     #endregion

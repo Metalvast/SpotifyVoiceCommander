@@ -20,7 +20,7 @@ public partial class MauiRouter
     [Inject] HostInfo _hostInfo { get; init; } = null!;
     [Inject] MauiBlazorCircuitContext _circuitContext { get; init; } = null!;
     [Inject] MauiBlazorNavigationManager _navigationManager { get; init; } = null!;
-    [Inject] INeedInitializationServicesInitializer _needInitializationServicesInitializer { get; init; } = null!;  
+    [Inject] INeedInitializationServicesInitializer _needInitializationServicesInitializer { get; init; } = null!;
 
     #endregion
 

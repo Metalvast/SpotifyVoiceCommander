@@ -1,5 +1,4 @@
-﻿using Etai.Blazor;
-using SpotifyVoiceCommander.Maui.Entities.Viewer.Models;
+﻿using SpotifyVoiceCommander.Maui.Entities.Viewer.Models;
 
 namespace SpotifyVoiceCommander.Maui.Entities.Viewer.Store;
 

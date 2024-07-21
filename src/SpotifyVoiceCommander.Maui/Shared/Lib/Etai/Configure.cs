@@ -1,5 +1,4 @@
-﻿using Etai.Blazor;
-using MudBlazor.Services;
+﻿using MudBlazor.Services;
 
 namespace SpotifyVoiceCommander.Maui.Shared.Lib.Etai;
 

@@ -1,6 +1,4 @@
-﻿using Etai.Blazor;
-
-namespace SpotifyVoiceCommander.Maui.Shared.UI;
+﻿namespace SpotifyVoiceCommander.Maui.Shared.UI;
 
 public abstract class SvcComponentBase : EtaiComponentBase
 {

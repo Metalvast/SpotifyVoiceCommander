@@ -1,7 +1,6 @@
 using ActualLab.Async;
 using ActualLab.Diagnostics;
 using ActualLab.Time;
-using Etai.Blazor;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;

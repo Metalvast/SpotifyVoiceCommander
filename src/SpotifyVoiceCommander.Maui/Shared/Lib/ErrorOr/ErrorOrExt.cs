@@ -2,6 +2,9 @@
 
 public static class ErrorOrExt
 {
+    public static TValue Unwrap<TValue>(this ErrorOr<TValue> errorOr) =>
+        errorOr.Value;
+
     public static ErrorOr<TValue> FailIf<TValue>(
         this ErrorOr<TValue> wrapper,
         Func<TValue, bool> onValue,

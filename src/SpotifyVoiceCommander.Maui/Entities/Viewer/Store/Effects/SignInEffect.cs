@@ -1,12 +1,11 @@
-﻿using SpotifyVoiceCommander.Maui.Entities.Viewer.Models;
-using SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Actions;
+﻿using SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Actions;
 using SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
 
 namespace SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Effects;
 
 internal class SignInEffect(
     IServiceProvider _services,
-    SpotifyClientWrapper _spotifyClientWrapper) 
+    SpotifyClientWrapper _spotifyClientWrapper)
     : BaseEffect<SignInAction>(_services)
 {
     public override Task InnerHandleAsync(ErrorOr<FluxorActionWrapper<SignInAction>> actionWrapper) => actionWrapper
@@ -14,5 +13,5 @@ internal class SignInEffect(
         .Switch(
             _ => Dispatch(new SignInSuccessAction { }),
             errors => ShowErrorMessage(errors)
-                .ThenDo(_ => Dispatch(new SignInFailureAction { }))); 
+                .ThenDo(_ => Dispatch(new SignInFailureAction { })));
 }
