@@ -9,9 +9,9 @@ public class Routes
         public const string SignIn = "sign-in";
     }
 
-    public class Player
+    public class AudioPlayer
     {
-        public const string BasePath = "player";
+        public const string BasePath = "audio-player";
 
         public const string Main = "main";
     }

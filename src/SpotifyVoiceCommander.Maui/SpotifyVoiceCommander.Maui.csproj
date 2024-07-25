@@ -65,7 +65,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\AudioPlayer\Components\" />
-    <Folder Include="Entities\AudioPlayer\Store\" />
     <Folder Include="Entities\Viewer\Components\" />
     <Folder Include="Entities\Viewer\Lib\" />
   </ItemGroup>

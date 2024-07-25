@@ -41,12 +41,11 @@ internal static class SpotifyClientExt
 
     public static async Task<bool> SafeSkipNext(
         this IPlayerClient spotifyClient,
-        PlayerSkipNextRequest request,
         CancellationToken cancel = default)
     {
         try
         {
-            return await spotifyClient.SkipNext(request, cancel);
+            return await spotifyClient.SkipNext(cancel);
         }
         catch
         {

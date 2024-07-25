@@ -62,8 +62,8 @@ public abstract class BaseEffect<TAction> : Effect<FluxorActionWrapper<TAction>>
     #region Fields
 
     private IDispatcher _dispatcher = null!;
-    private TagId? _callerId;
-    private CancellationToken _cancellationToken;
+    protected TagId? CallerId;
+    protected CancellationToken CancellationToken;
 
     #endregion
 
@@ -72,8 +72,8 @@ public abstract class BaseEffect<TAction> : Effect<FluxorActionWrapper<TAction>>
     public override async Task HandleAsync(FluxorActionWrapper<TAction> actionWrapper, IDispatcher dispatcher)
     {
         _dispatcher = dispatcher;
-        _callerId = actionWrapper.TagId;
-        _cancellationToken = actionWrapper.CancellationToken;
+        CallerId = actionWrapper.TagId;
+        CancellationToken = actionWrapper.CancellationToken;
         var tracerRegion = Tracer.Default.Region($"{GetType().Name} | {Guid.NewGuid()}", true);
         await InnerHandleAsync(actionWrapper);
         tracerRegion.Close();
@@ -84,15 +84,26 @@ public abstract class BaseEffect<TAction> : Effect<FluxorActionWrapper<TAction>>
             .Then(action => new FluxorActionWrapper<TNextAction>
             {
                 Action = action,
-                TagId = _callerId,
-                CancellationToken = _cancellationToken,
+                TagId = CallerId,
+                CancellationToken = CancellationToken,
             })
             .ThenDo(_dispatcher.Dispatch)
             .Then(_ => Result.Success);
 
     public abstract Task InnerHandleAsync(ErrorOr<FluxorActionWrapper<TAction>> actionWrapper);
 
-    public ErrorOr<IEnumerable<Error>> ShowErrorMessage(
+    protected Error HandleErrorState<TFailureAction>(
+        IEnumerable<Error> errors,
+        TFailureAction failureAction,
+        Error returnError,
+        string displayMessage = "Ups, something goes wrong...")
+        where TFailureAction : ISvcAction =>
+        ShowErrorMessage(errors)
+            .ThenDo(_ => Dispatch(failureAction))
+            .Then(_ => returnError)
+            .Unwrap();
+
+    protected ErrorOr<IEnumerable<Error>> ShowErrorMessage(
         IEnumerable<Error> errorMessages,
         string displayMessage = "Ups, something goes wrong...")
     {

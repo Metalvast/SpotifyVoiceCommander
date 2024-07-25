@@ -36,7 +36,7 @@ public sealed class SpotifyClientWrapper(
     public ErrorOr<SpotifyClient> SpotifyClient =>
         _spotifyClient != null
             ? _spotifyClient.ToErrorOr()
-            : Errors.NotInitialized;
+            : SvcErrors.NotInitialized;
 
     public event Action<ClaimsPrincipal>? OnAuthenticationStateChanged;
 
@@ -63,11 +63,11 @@ public sealed class SpotifyClientWrapper(
 
         var browserAuthenticationResult = await _authenticationBrowser.InvokeAsync(new BrowserOptions(loginUrl, callbackUrl), ct);
         if (browserAuthenticationResult.IsError)
-            return Errors.InitializationFailed;
+            return SvcErrors.InitializationFailed;
 
         var code = HttpUtility.ParseQueryString(new Uri(browserAuthenticationResult.Response).Query).Get("code");
         if (code == null)
-            return Errors.InitializationFailed;
+            return SvcErrors.InitializationFailed;
 
         var authInfo = await _oAuthClient.RequestToken(
             new PKCETokenRequest(

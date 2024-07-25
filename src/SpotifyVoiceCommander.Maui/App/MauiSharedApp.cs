@@ -20,4 +20,20 @@ public class MauiSharedApp : Application
         MainPage = mainPage;
         Services = services;
     }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        var window = base.CreateWindow(activationState);
+
+#if IS_DEV_MAUI
+        window.Title = "SpotifyVoiceCommander (Dev)";
+#else
+        window.Title = "SpotifyVoiceCommander";
+#endif
+
+        window.MinimumHeight = window.MaximumHeight = window.Height = 600;
+        window.MinimumWidth = window.MaximumWidth = window.Width = 400;
+        
+        return window;
+    }
 }

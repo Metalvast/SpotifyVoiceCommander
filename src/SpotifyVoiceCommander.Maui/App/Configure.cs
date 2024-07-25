@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer;
 using SpotifyVoiceCommander.Maui.Shared;
 using System.Reflection;
 
@@ -16,6 +17,8 @@ internal static class Configure
             configuration,
             hostAssembly,
             additionalAssemblies);
+
+        services.AddSpeechRecognizerServices();
 
         return services;
     }

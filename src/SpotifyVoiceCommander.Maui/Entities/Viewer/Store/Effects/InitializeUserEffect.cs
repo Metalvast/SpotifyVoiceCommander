@@ -11,9 +11,10 @@ internal class InitializeViewerEffect(IServiceProvider services) : BaseEffect<In
         .ThenAsync(aw => aw.Action.AuthenticationStateTask)
         .FailIf(
             authenticationState => !authenticationState.User.Identity!.IsAuthenticated,
-            authenticationState => Dispatch(new InitializeViewerSuccessAction { })
-                .Then(_ => Error.Unauthorized())
-                .Unwrap())
+            authenticationState => HandleErrorState(
+                [],
+                new InitializeViewerSuccessAction { },
+                Error.Unauthorized()))
         .Then(authenticationState => new ViewerModel
         {
             Id = authenticationState.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value,
@@ -24,8 +25,8 @@ internal class InitializeViewerEffect(IServiceProvider services) : BaseEffect<In
             Viewer = viewer,
         }))
         .ThenDo(_ => _navigationManager.NavigateToPlayer())
-        .Else(errors => ShowErrorMessage(errors)
-            .ThenDo(_ => Dispatch(new InitializeViewerFailureAction { }))
-            .Then(_ => Error.Unauthorized())
-            .Unwrap());
+        .Else(errors => HandleErrorState(
+            errors,
+            new InitializeViewerFailureAction { },
+            Error.Unauthorized()));
 }
