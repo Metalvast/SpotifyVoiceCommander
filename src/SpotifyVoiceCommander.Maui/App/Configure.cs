@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SpotifyVoiceCommander.Maui.App.ServicesAbstractions;
 using SpotifyVoiceCommander.Maui.Entities;
+using SpotifyVoiceCommander.Maui.Features;
 using SpotifyVoiceCommander.Maui.Shared;
 using System.Reflection;
 
@@ -19,5 +20,6 @@ internal static class Configure
                 hostAssembly,
                 additionalAssemblies)
             .ConfigureEntityLayer()
+            .ConfigureFeatureLayer()
             .AddServicesAbstractions();
 }

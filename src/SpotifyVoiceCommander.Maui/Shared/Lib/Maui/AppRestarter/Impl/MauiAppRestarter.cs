@@ -4,5 +4,5 @@ namespace SpotifyVoiceCommander.Maui.Shared.Lib.AppRestarter;
 
 internal partial class MauiAppRestarter : IMauiAppRestarter
 {
-    public partial Task Restart();
+    public partial Task Restart(bool startRecognizerImmediately = false);
 }

@@ -1,0 +1,16 @@
+﻿@inherits SvcFluxorComponentBase
+
+<div @attributes="UserAttributes"
+     style="@StyleName"
+     class="@ClassName d-flex flex-row align-center gap-1 w-100 pa-1">
+    <EtaiIcon Icon="@Icons.Material.Filled.Circle"
+              Color="_stateIconColor" />
+    <MudText>
+        @_stateText
+    </MudText>
+    <MudSpacer />
+    <EtaiIcon Type="IconType.CircleButton"
+              Icon="@Icons.Material.Filled.PlayArrow"
+              Color="Color.Surface"
+              OnButtonClick="OnStartRecordingCommandButtonClick" />
+</div>

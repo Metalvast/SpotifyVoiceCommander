@@ -13,7 +13,8 @@ internal static class Configure
             .AddMauiDiagnostics(false)
             .AddMauiCircuitContext()
             .AddSingleton<MauiReloadUI>()
-            .AddSingleton<MauiRecognizerStarterService>();
+            .AddSingleton<MauiRecognizerStarterService>()
+            .AddHostedService(sp => sp.GetRequiredService<MauiRecognizerStarterService>());
 
     public static IServiceCollection AddMauiDiagnostics(
         this IServiceCollection services,

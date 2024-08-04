@@ -13,7 +13,7 @@ public partial class MauiRootPage : ContentPage
     {
         Interlocked.Exchange(ref _current, this);
         //On<iOS>().SetUseSafeArea(true);
-        BackgroundColor = Color.FromArgb("#E9EAED");
+        BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#E9EAED");
         MauiLoadingUI.MarkFirstWebViewCreated();
         RecreateWebView();
     }

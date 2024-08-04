@@ -66,13 +66,6 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\AudioPlayer\Components\" />
-    <Folder Include="Entities\SpeechRecognizer\Lib\" />
-    <Folder Include="Entities\Viewer\Components\" />
-    <Folder Include="Entities\Viewer\Lib\" />
-  </ItemGroup>
-
   <!-- Dev Constants -->
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

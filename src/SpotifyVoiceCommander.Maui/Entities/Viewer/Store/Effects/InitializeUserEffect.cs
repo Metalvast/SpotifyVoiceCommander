@@ -21,9 +21,22 @@ internal class InitializeViewerEffect(IServiceProvider services) : BaseEffect<In
         {
             Viewer = viewer,
         }))
-        .ThenDo(_ => _navigationManager.NavigateToPlayer())
-        .Else(errors => HandleErrorState(
+        .Switch(_ => _navigationManager.NavigateToPlayer(), HandleErrors);
+
+    private void HandleErrors(IEnumerable<Error> errors)
+    {
+        if (errors.Contains(Error.Unauthorized()))
+        {
+            Dispatch(new InitializeViewerSuccessAction
+            {
+                Viewer = null,
+            });
+            return;
+        }
+
+        HandleErrorState(
             errors,
             new InitializeViewerFailureAction { },
-            Error.Unauthorized()));
+            Error.Unexpected());
+    }
 }

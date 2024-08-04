@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using SpotifyVoiceCommander.Maui.App.ServicesAbstractions;
 using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
 using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
@@ -19,10 +20,9 @@ public partial class MauiRouter
 
     [Inject] IServiceProvider _services { get; init; } = null!;
     [Inject] ILogger<MauiRouter> _logger { get; init; } = null!;
-    [Inject] HostInfo _hostInfo { get; init; } = null!;
     [Inject] MauiBlazorCircuitContext _circuitContext { get; init; } = null!;
     [Inject] SvcNavigationManager _navigationManager { get; init; } = null!;
-    [Inject] INeedInitializationServicesInitializer _needInitializationServicesInitializer { get; init; } = null!;
+    [Inject] AppScopedServiceStarter _appScopedServiceStarter { get; init; } = null!;
 
     #endregion
 
@@ -34,14 +34,14 @@ public partial class MauiRouter
 
     #region LC Methods
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         _mauiWebView = MauiWebView.Current;
         _mauiWebView?.SetScopedServices(_services);
         try
         {
             _circuitContext.RootComponent = this;
-            await _needInitializationServicesInitializer.InitializeAsync();
+            _ = _appScopedServiceStarter.StartScopedServices();
         }
         catch (Exception e)
         {

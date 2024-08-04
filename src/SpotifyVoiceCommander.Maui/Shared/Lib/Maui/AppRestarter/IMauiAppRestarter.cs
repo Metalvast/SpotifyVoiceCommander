@@ -2,5 +2,5 @@
 
 internal interface IMauiAppRestarter
 {
-    Task Restart();
+    Task Restart(bool startRecognizerImmediately = false);
 }

@@ -11,23 +11,21 @@ namespace SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store.Effects;
 internal class RecognizeSpeechEffect(IServiceProvider _services) : BaseEffect<RecognizeSpeechAction>(_services)
 {
     public override Task InnerHandleAsync(ErrorOr<FluxorActionWrapper<RecognizeSpeechAction>> actionWrapper) => actionWrapper
-        .ThenAsync(aw => _httpEndpointsClient.YandexEndpoints
-            .RecognizeSpeechAsync(
-                new RecognizeSpeechRequest
-                {
-                    AudioData = aw.Action.AudioData
-                },
-                aw.CancellationToken)
-            .Then(recognizeResponse => (RecognizeResult: recognizeResponse.Result, aw.CancellationToken)))
+        .ThenAsync(aw => _httpEndpointsClient.YandexEndpoints.RecognizeSpeechAsync(
+            new RecognizeSpeechRequest
+            {
+                AudioData = aw.Action.AudioData
+            },
+            CancellationToken))
         .FailIf(
-            recognizeResponse => recognizeResponse.RecognizeResult.IsNullOrEmpty(),
+            recognizeResponse => recognizeResponse.Result.IsNullOrEmpty(),
             _ => SpeechRecognizerErrors.RecognizeFailed)
         .ThenAsync(recognizeResponse => _httpEndpointsClient.YandexEndpoints.AnalyzeSpeechAsync(
             new AnalyzeSpeechRequest
             {
-                RecognizedSpeech = recognizeResponse.RecognizeResult!,
+                RecognizedSpeech = recognizeResponse.Result!,
             },
-            recognizeResponse.CancellationToken))
+            CancellationToken))
         .ThenDo(analyzeResponse => Dispatch(new RecognizeSpeechSuccessAction
         {
             Result = analyzeResponse.Result,

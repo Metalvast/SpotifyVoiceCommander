@@ -1,16 +1,29 @@
-﻿@using SpotifyVoiceCommander.Maui.Widgets.AudioPlayer.AudioPlayerFlowProvider
-
-@inherits EtaiLayoutComponentBase
+﻿@inherits EtaiLayoutComponentBase
 
 <MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" />
 
 <EtaiCtxMenuProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-<AudioPlayerFlowProvider />
 
 <div @attributes="UserAttributes"
      style="@StyleName"
      class="@ClassName w-vw-100 h-vh-100">
-    @Body
+    <ErrorBoundary @ref="_errorBoundary">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent>
+            <MudStack AlignItems="AlignItems.Center"
+                      Justify="Justify.Center"
+                      Class="w-100 h-100">
+                <MudText>
+                    Произошла критическая ошибка.
+                </MudText>
+                <MudButton OnClick="OnRestartAppButtonClick">
+                    Перезагрузить приложение.
+                </MudButton>
+            </MudStack>
+        </ErrorContent>
+    </ErrorBoundary>
 </div>

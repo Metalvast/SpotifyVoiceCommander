@@ -9,7 +9,11 @@ global using SpotifyVoiceCommander.Maui.Shared.Lib.Fluxor;
 global using SpotifyVoiceCommander.Maui.Shared.UI;
 global using SpotifyVoiceCommander.Shared;
 global using static SpotifyVoiceCommander.Maui.Shared.Lib.AppServicesAccessor;
+// Blazor
 global using BlazorAuthenticationStateProvider = Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider;
 global using BlazorDispatcher = Microsoft.AspNetCore.Components.Dispatcher;
 global using BlazorNavigationManager = Microsoft.AspNetCore.Components.NavigationManager;
+// MudBlazor
+global using Color = MudBlazor.Color;
+// Fluxor
 global using IDispatcher = Fluxor.IDispatcher;

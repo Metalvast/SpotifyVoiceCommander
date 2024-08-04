@@ -9,11 +9,11 @@ partial class MauiAppRestarter(
     SvcNavigationManager _mauiBlazorNavigationManager) 
     : IMauiAppRestarter
 {
-    public partial async Task Restart()
+    public partial async Task Restart(bool startRecognizerImmediately)
     {
         try
         {
-            var targetUri = $"spotifyvoicecommanderapp://{_mauiBlazorNavigationManager.GetPlayerUri(startRecognizerImmediately: true)}";
+            var targetUri = $"spotifyvoicecommanderapp://{_mauiBlazorNavigationManager.GetPlayerUri(startRecognizerImmediately)}";
             await Launcher.TryOpenAsync(targetUri);
             MainThreadExt.InvokeLater(() => Application.Current?.CloseWindow(Application.Current.MainPage!.Window));
         }

@@ -18,6 +18,7 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
             if (subcriber is not ISvcFluxorComponentSubscriber componentSubscriber || !_mustRender)
             {
                 ExecuteAllSyncHandlers(actionWrapper);
+                _ = ExecuteAllAsyncHandlers(actionWrapper);
                 return;
             }
 

@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Maui;
+using Microsoft.Maui.LifecycleEvents;
 using Plugin.Maui.Audio;
 using SpotifyVoiceCommander.Maui.App;
+using SpotifyVoiceCommander.Maui.App.ServicesAbstractions;
 using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
 using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
 
 namespace SpotifyVoiceCommander.Maui;
 
-public static class MauiProgram
+public static partial class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
@@ -18,6 +20,7 @@ public static class MauiProgram
         var builder = MauiApp
             .CreateBuilder()
             .UseMauiApp<MauiSharedApp>()
+            .ConfigureLifecycleEvents(ConfigurePlatformLifecycleEvents)
             .AddEtaiMauiBlazorConfiguration(MauiSettings.BaseUrl, MauiSettings.Environment)
             .UseMauiCommunityToolkit()
             .AddAudio();
@@ -32,14 +35,22 @@ public static class MauiProgram
         services.AddBlazorWebViewDeveloperTools();
         services.AddScoped<Mutable<MauiWebView?>>();
 
+        // Maui
+        AddPlatformServices(services);
+
         // Content
         services.ConfigureAppLayer(
             configuration,
             MauiSettings.MainAssembly,
             MauiSettings.TargetAssemblies);
 
-        return builder.Build();
+        var app = builder.Build();
+
+        _ = app.Services.GetRequiredService<AppNonScopedServiceStarter>().StartNonScopedServices();
+
+        return app;
     }
 
-   
+    private static partial void AddPlatformServices(this IServiceCollection services);
+    private static partial void ConfigurePlatformLifecycleEvents(ILifecycleBuilder events);
 }

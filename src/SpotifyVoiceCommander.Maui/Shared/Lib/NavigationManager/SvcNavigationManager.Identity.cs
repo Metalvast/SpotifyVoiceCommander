@@ -10,6 +10,10 @@ partial class SvcNavigationManager
                 ["RedirectUri"] = redirectUri
             });
 
-    public void NavigateToSignIn(string? redirectUri = null) =>
-        Instance.NavigateTo(GetSignInUri(redirectUri));
+    public void NavigateToSignIn(
+        string? redirectUri = null,
+        bool forceReload = false) =>
+        Instance.NavigateTo(
+            GetSignInUri(redirectUri),
+            forceReload);
 }

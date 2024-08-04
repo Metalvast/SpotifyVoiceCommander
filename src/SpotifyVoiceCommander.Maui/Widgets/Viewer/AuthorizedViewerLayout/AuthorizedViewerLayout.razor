@@ -1,0 +1,15 @@
+﻿@using SpotifyVoiceCommander.Maui.App
+@using SpotifyVoiceCommander.Maui.Widgets.Viewer.AuthorizedViewerLayout.Components
+
+@layout MainLayout
+@inherits EtaiLayoutComponentBase
+
+<div @attributes="UserAttributes"
+     style="@StyleName"
+     class="@ClassName d-flex flex-column align-center w-100 h-100">
+    <ViewerToolbar Class="border-b" />
+    <div class="w-100 flex-grow-1">
+        @Body
+    </div>
+    <SpeechRecognizerToolbar Class="border-t" />
+</div>

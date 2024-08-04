@@ -1,4 +1,5 @@
-using SpotifyVoiceCommander.Maui.Shared.Lib.Maui.AppRestarter;
+using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store.Actions;
+using SpotifyVoiceCommander.Maui.Features.SpeechRecognizer.SpeechRecognizerFacade;
 using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 
 namespace SpotifyVoiceCommander.Maui.Pages.AudioPlayer;
@@ -7,14 +8,27 @@ namespace SpotifyVoiceCommander.Maui.Pages.AudioPlayer;
 [Route(SvcRoutes.AudioPlayer.Main)]
 public partial class IndexPage : SvcFluxorComponentBase
 {
-    [SupplyParameterFromQuery] public bool StartRecognizerImmediately { get; set; } 
+    #region Params
 
-    [Inject] IMauiAppRestarter _appRestarter { get; init; } = null!;
+    [SupplyParameterFromQuery] public bool StartRecognizerImmediately { get; set; }
 
-    private void Start()
+    #endregion
+
+    #region Injects
+
+    [Inject] SpeechRecognizerFacade _speechRecognizerFacade { get; init; } = null!;
+
+    #endregion
+
+    #region LC Methods
+
+    protected override void OnInitialized()
     {
-        _appRestarter.Restart();
+        base.OnInitializedAsync();
 
-        // Dispatch(new StartSpeechRecordingAction { });
+        if (StartRecognizerImmediately)
+            _ = _speechRecognizerFacade.WhenInitialized.ContinueWith(_ => Dispatch(new StartSpeechRecordingAction { }));
     }
+
+    #endregion
 }

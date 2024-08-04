@@ -31,8 +31,8 @@ public class MauiSharedApp : Application
         window.Title = "SpotifyVoiceCommander";
 #endif
 
-        window.MinimumHeight = window.MaximumHeight = window.Height = 600;
-        window.MinimumWidth = window.MaximumWidth = window.Width = 400;
+        window.MinimumHeight = window.MaximumHeight = window.Height = 200;
+        window.MinimumWidth = window.MaximumWidth = window.Width = 300;
         
         return window;
     }

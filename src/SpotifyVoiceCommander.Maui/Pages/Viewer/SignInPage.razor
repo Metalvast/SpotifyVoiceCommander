@@ -1,7 +1,10 @@
 ﻿@inherits SvcFluxorComponentBase
 
-<div class="page">
-    <MudButton OnClick="OnSignInButtonClick">
-        Sign In
+<div @attributes="UserAttributes"
+     style="@StyleName"
+     class="@ClassName d-flex flex-column align-center justify-center w-100 h-100">
+    <MudButton OnClick="OnSignInButtonClick"
+               Variant="Variant.Outlined">
+        <img src="images/spotify-icon.png" class="me-2" /> Sign In
     </MudButton>
 </div>

@@ -12,17 +12,21 @@ internal class StartSpeechRecordingEffect(
     IState<SpeechRecognizerState> _speechRecognizerState,
     MauiRecognizerStarterService _recognizeStarterService,
     IBeepManager _beepManager,
-    IAudioRecorderErrorHandler _audioRecorderErrorHandler) 
+    IAudioRecorderErrorHandler _audioRecorderErrorHandler)
     : BaseEffect<StartSpeechRecordingAction>(_services)
 {
     public override Task InnerHandleAsync(ErrorOr<FluxorActionWrapper<StartSpeechRecordingAction>> actionWrapper) => actionWrapper
         .FailIf(
-            _ => _speechRecognizerState.Value.IsRecording,
+            _ => _speechRecognizerState.Value.IsBusy,
             _ => Error.Conflict())
         .Then(_ => _speechRecognizerState.Value.AudioRecorder)
         .ThenDoAsync(_ => _recognizeStarterService.Lock())
         .ThenAsync(audioRecorder => audioRecorder.SafeStartAsync())
-        .Else(errors => Dispatch(new StartSpeechRecordingFailureAction { })
+        .Else(errors =>
+            Dispatch(new StartSpeechRecordingFailureAction
+            {
+                Error = errors.First(),
+            })
             .Then(_ => errors.First())
             .Unwrap())
         .ThenDo(_ => _beepManager.BeepAsync())
@@ -36,7 +40,7 @@ internal class StartSpeechRecordingEffect(
         .ThenDo(_ => _beepManager.BeepAsync())
         .ThenAsync(GetAudioData)
         .SwitchAsync(
-            audioData => 
+            audioData =>
                 Dispatch(new RecognizeSpeechAction
                 {
                     AudioData = audioData,

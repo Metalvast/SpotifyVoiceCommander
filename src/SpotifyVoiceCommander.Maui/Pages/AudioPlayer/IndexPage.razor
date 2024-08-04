@@ -1,7 +1,10 @@
-﻿@using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Components
+﻿@using SpotifyVoiceCommander.Maui.Widgets.Viewer.AuthorizedViewerLayout
 
+@layout AuthorizedViewerLayout
 @inherits SvcFluxorComponentBase
 
-<div class="w-100 h-100">
-   <SpeechRecognizerListner StartRecognizerImmediately="StartRecognizerImmediately"/>
+<div @attributes="UserAttributes"
+     style="@StyleName"
+     class="@ClassName d-flex flex-column align-center justify-center w-100 h-100">
+    <MudText>Spotify Voice Commander</MudText>
 </div>

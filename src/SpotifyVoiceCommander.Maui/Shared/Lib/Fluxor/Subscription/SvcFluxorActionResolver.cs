@@ -38,8 +38,11 @@ internal class SvcFluxorActionResolver(
     public void Dispose()
     {
         _subscriptions.Clear();
-        _actionSubscriber.UnsubscribeFromAllActions(_subscriber);
-        _subscriber = null;
+        if (_subscriber != null)
+        {
+            _actionSubscriber.UnsubscribeFromAllActions(_subscriber);
+            _subscriber = null;
+        }
     }
 
     #endregion

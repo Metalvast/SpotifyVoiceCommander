@@ -35,7 +35,25 @@ internal static class SpeechRecognizerReducers
         };
 
     [ReducerMethod]
-    public static SpeechRecognizerState Reduce(
+    public static SpeechRecognizerState ReduceStartSpeechRecordingAction(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<StartSpeechRecordingAction> _) =>
+        state with
+        {
+            LastError = default,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState ReduceStartSpeechRecordingFailureAction(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<StartSpeechRecordingFailureAction> actionWrapper) =>
+        state with
+        {
+            LastError = actionWrapper.Action.Error,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState ReduceStartSpeechRecordingSuccessAction(
         SpeechRecognizerState state,
         FluxorActionWrapper<StartSpeechRecordingSuccessAction> _) =>
         state with
@@ -44,7 +62,7 @@ internal static class SpeechRecognizerReducers
         };
 
     [ReducerMethod]
-    public static SpeechRecognizerState Reduce(
+    public static SpeechRecognizerState ReduceRecognizeSpeechFailureAction(
         SpeechRecognizerState state,
         FluxorActionWrapper<RecognizeSpeechFailureAction> _) =>
         state with
@@ -53,7 +71,7 @@ internal static class SpeechRecognizerReducers
         };
 
     [ReducerMethod]
-    public static SpeechRecognizerState Reduce(
+    public static SpeechRecognizerState ReduceRecognizeSpeechSuccessAction(
         SpeechRecognizerState state,
         FluxorActionWrapper<RecognizeSpeechSuccessAction> _) =>
         state with
