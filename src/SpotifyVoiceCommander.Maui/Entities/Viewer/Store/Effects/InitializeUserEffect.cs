@@ -1,6 +1,6 @@
 ﻿using SpotifyVoiceCommander.Maui.Entities.Viewer.Models;
 using SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Actions;
-using SpotifyVoiceCommander.Maui.Shared.Framework;
+using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 using System.Security.Claims;
 
 namespace SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Effects;
@@ -11,10 +11,7 @@ internal class InitializeViewerEffect(IServiceProvider services) : BaseEffect<In
         .ThenAsync(aw => aw.Action.AuthenticationStateTask)
         .FailIf(
             authenticationState => !authenticationState.User.Identity!.IsAuthenticated,
-            authenticationState => HandleErrorState(
-                [],
-                new InitializeViewerSuccessAction { },
-                Error.Unauthorized()))
+            _ => Error.Unauthorized())
         .Then(authenticationState => new ViewerModel
         {
             Id = authenticationState.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value,

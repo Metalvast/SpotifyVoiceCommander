@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.Logging;
 using SpotifyVoiceCommander.Maui.App;
+using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
@@ -88,7 +89,7 @@ public sealed partial class MauiWebView
             ScopedServices = scopedServices;
             //Session = session;
             scopedServices.GetRequiredService<Mutable<MauiWebView?>>().Value = this;
-            MauiAppServicesAccessor.ScopedServices = scopedServices;
+            AppServicesAccessor.ScopedServices = scopedServices;
         }
         //if (isSessionChanged)
         //    SetupSessionCookie(session);

@@ -1,6 +1,9 @@
 ﻿// To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
+using Microsoft.Windows.AppLifecycle;
+using Windows.ApplicationModel.Activation;
+
 namespace SpotifyVoiceCommander.Maui.WinUI
 {
     /// <summary>
@@ -20,7 +23,22 @@ namespace SpotifyVoiceCommander.Maui.WinUI
             this.InitializeComponent();
         }
 
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            var actArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
+            if (actArgs.Kind is ExtendedActivationKind.Protocol &&
+                actArgs.Data is IProtocolActivatedEventArgs protocolActivatedEventArgs &&
+                !protocolActivatedEventArgs.Uri.PathAndQuery.Contains("callback"))
+                _ = WhenScopedServicesReady().ContinueWith(t =>
+                {
+                    var scopedServices = t.Result;
+                    var targetUri = protocolActivatedEventArgs.Uri.ToString().Replace("spotifyvoicecommanderapp://", "");
+                    scopedServices.GetRequiredService<NavigationManager>().NavigateTo(targetUri);
+                });
+
+            base.OnLaunched(args);
+        }
+
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
-
 }

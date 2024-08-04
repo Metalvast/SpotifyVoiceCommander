@@ -22,10 +22,7 @@ internal class FindAndPlayTrackEffect(
         .Then(s => (BestMatch: s.SearchResult.Tracks.Items?.FirstOrDefault(), s.SpotifyClient))
         .FailIf(
             s => s.BestMatch == null,
-            _ => HandleErrorState(
-                [],
-                new FindAndPlayTrackFailureAction { },
-                Error.NotFound()))
+            _ => Error.NotFound())
         .ThenDoAsync(s => s.SpotifyClient.Player
             .SafeAddToQueue(new PlayerAddToQueueRequest($"spotify:track:{s.BestMatch!.Id}"), CancellationToken)
             .ContinueWith(_ => s.SpotifyClient.Player.SafeSkipNext(CancellationToken)))

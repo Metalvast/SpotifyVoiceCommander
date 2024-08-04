@@ -1,9 +1,16 @@
-﻿@inherits LayoutComponentBase
+﻿@using SpotifyVoiceCommander.Maui.Widgets.AudioPlayer.AudioPlayerFlowProvider
+
+@inherits EtaiLayoutComponentBase
 
 <MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" />
 
 <EtaiCtxMenuProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+<AudioPlayerFlowProvider />
 
-@Body
+<div @attributes="UserAttributes"
+     style="@StyleName"
+     class="@ClassName w-vw-100 h-vh-100">
+    @Body
+</div>

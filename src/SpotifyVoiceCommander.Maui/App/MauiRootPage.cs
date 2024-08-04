@@ -1,4 +1,5 @@
-﻿using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
+﻿using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
+using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
 
 namespace SpotifyVoiceCommander.Maui.App;
 

@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
-using SpotifyVoiceCommander.Maui.Shared.Framework;
+using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
+using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
+using SpotifyVoiceCommander.Maui.Shared.Lib.WebView;
 using System.Reflection;
 
 namespace SpotifyVoiceCommander.Maui.App;
@@ -19,8 +21,14 @@ public partial class MauiRouter
     [Inject] ILogger<MauiRouter> _logger { get; init; } = null!;
     [Inject] HostInfo _hostInfo { get; init; } = null!;
     [Inject] MauiBlazorCircuitContext _circuitContext { get; init; } = null!;
-    [Inject] MauiBlazorNavigationManager _navigationManager { get; init; } = null!;
+    [Inject] SvcNavigationManager _navigationManager { get; init; } = null!;
     [Inject] INeedInitializationServicesInitializer _needInitializationServicesInitializer { get; init; } = null!;
+
+    #endregion
+
+    #region Fields
+
+    private MauiWebView? _mauiWebView;
 
     #endregion
 
@@ -28,15 +36,19 @@ public partial class MauiRouter
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
-        _circuitContext.RootComponent = this;
-        await _needInitializationServicesInitializer.InitializeAsync();
+        _mauiWebView = MauiWebView.Current;
+        _mauiWebView?.SetScopedServices(_services);
+        try
+        {
+            _circuitContext.RootComponent = this;
+            await _needInitializationServicesInitializer.InitializeAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "OnInitializedAsync failed, will reload...");
+            AppServices.GetRequiredService<MauiReloadUI>().Reload(); // ReloadUI is a singleton on MAUI
+        }
     }
-
-    protected virtual void Dispose(bool disposing) { }
-
-    public void Dispose() =>
-        Dispose(true);
 
     #endregion
 }

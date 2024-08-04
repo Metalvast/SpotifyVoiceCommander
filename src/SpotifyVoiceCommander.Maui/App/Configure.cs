@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer;
+using SpotifyVoiceCommander.Maui.App.ServicesAbstractions;
+using SpotifyVoiceCommander.Maui.Entities;
 using SpotifyVoiceCommander.Maui.Shared;
 using System.Reflection;
 
@@ -11,15 +12,12 @@ internal static class Configure
         this IServiceCollection services,
         IConfiguration configuration,
         Assembly hostAssembly,
-        Assembly[] additionalAssemblies)
-    {
-        services.ConfigureSharedLayer(
-            configuration,
-            hostAssembly,
-            additionalAssemblies);
-
-        services.AddSpeechRecognizerServices();
-
-        return services;
-    }
+        Assembly[] additionalAssemblies) =>
+        services
+            .ConfigureSharedLayer(
+                configuration,
+                hostAssembly,
+                additionalAssemblies)
+            .ConfigureEntityLayer()
+            .AddServicesAbstractions();
 }

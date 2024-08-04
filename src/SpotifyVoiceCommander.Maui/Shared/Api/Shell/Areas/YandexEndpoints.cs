@@ -1,6 +1,7 @@
 ﻿
 using RestSharp;
 using SpotifyVoiceCommander.Maui.Shared.Api.Lib;
+using SpotifyVoiceCommander.Maui.Shared.Api.Shell;
 using SpotifyVoiceCommander.Shared.Models.AnalyzeSpeech;
 using SpotifyVoiceCommander.Shared.Models.RecognizeSpeech;
 

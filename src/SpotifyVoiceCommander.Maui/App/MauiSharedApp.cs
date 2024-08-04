@@ -24,7 +24,7 @@ public class MauiSharedApp : Application
     protected override Window CreateWindow(IActivationState? activationState)
     {
         var window = base.CreateWindow(activationState);
-
+        
 #if IS_DEV_MAUI
         window.Title = "SpotifyVoiceCommander (Dev)";
 #else

@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using SpotifyVoiceCommander.Maui.Entities.Viewer.Store.Actions;
+using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 
 namespace SpotifyVoiceCommander.Maui.Pages.Viewer;
 
 [AllowAnonymous]
-[Route($"{Routes.Identity.BasePath}/{Routes.Identity.SignIn}")]
-public partial class SignInPage : SvcComponentFluxorBase
+[Route(SvcRoutes.Identity.SignIn)]
+public partial class SignInPage : SvcFluxorComponentBase
 {
     #region Internal events
 

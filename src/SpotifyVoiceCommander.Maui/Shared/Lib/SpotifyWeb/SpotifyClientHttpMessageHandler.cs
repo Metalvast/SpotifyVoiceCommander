@@ -1,6 +1,8 @@
-﻿namespace SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
+﻿using SpotifyVoiceCommander.Maui.Shared.Api.Lib;
 
-public sealed class SpotifyClientHttpMessageHandler(BackendUrlMapper _backendUrlMapper) : HttpClientHandler
+namespace SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
+
+public sealed class SpotifyClientHttpMessageHandler(InternalApiUrlMapper _backendUrlMapper) : HttpClientHandler
 {
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {

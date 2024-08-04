@@ -1,9 +1,10 @@
-﻿using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Lib;
+﻿using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store;
 
 namespace SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer;
 
 internal static class Configure
 {
-    public static IServiceCollection AddSpeechRecognizerServices(this IServiceCollection services) =>
-        services.AddScoped<SpeechRecordingManager>();
+    public static IServiceCollection AddSpeechRecognizerEntityServices(this IServiceCollection services) =>
+        services
+            .AddScoped<SpeechRecognizerStateFacade>();
 }

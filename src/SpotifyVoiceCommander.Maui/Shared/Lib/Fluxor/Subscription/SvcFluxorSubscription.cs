@@ -17,14 +17,15 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
 
             if (subcriber is not ISvcFluxorComponentSubscriber componentSubscriber || !_mustRender)
             {
-                ExecuteAllHandlers(actionWrapper);
+                ExecuteAllSyncHandlers(actionWrapper);
                 return;
             }
 
             componentSubscriber
                 .GetBlazorDispatcher()
-                .InvokeAsync(delegate {
-                    ExecuteAllHandlers(actionWrapper);
+                .InvokeAsync(async delegate {
+                    ExecuteAllSyncHandlers(actionWrapper);
+                    await ExecuteAllAsyncHandlers(actionWrapper);
                     componentSubscriber.CallStateHasChanged();
                 });
         });
@@ -35,7 +36,8 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
     #region Fields
 
     private readonly TagId _tagId;
-    private readonly List<Action<FluxorActionWrapper<TAction>>> _handlers = [];
+    private readonly List<Action<FluxorActionWrapper<TAction>>> _syncHandlers = [];
+    private readonly List<Func<FluxorActionWrapper<TAction>, Task>> _asyncHandlers = [];
     private readonly List<Func<FluxorActionWrapper<TAction>, bool>> _conditions = [];
     private bool _mustRender = true;
 
@@ -43,9 +45,15 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
 
     #region Pipe methods
 
-    public SvcFluxorSubscription<TAction> WithHandler(Action<FluxorActionWrapper<TAction>> hanlder)
+    public SvcFluxorSubscription<TAction> WithHandler(Action<FluxorActionWrapper<TAction>> syncHandler)
     {
-        _handlers.Add(hanlder);
+        _syncHandlers.Add(syncHandler);
+        return this;
+    }
+
+    public SvcFluxorSubscription<TAction> WithHandler(Func<FluxorActionWrapper<TAction>, Task> asyncHanlder)
+    {
+        _asyncHandlers.Add(asyncHanlder);
         return this;
     }
 
@@ -55,7 +63,7 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
         return this;
     }
 
-    public SvcFluxorSubscription<TAction> WithComponentReceiverCondition()
+    public SvcFluxorSubscription<TAction> WithTagReceiverCondition()
     {
         _conditions.Add(action => action.TagId == _tagId);
         return this;
@@ -74,11 +82,11 @@ public class SvcFluxorSubscription<TAction> : ISvcFluxorSubscription
     private bool CheckAllConditions(FluxorActionWrapper<TAction> actionWrapper) =>
         _conditions.All(condition => condition.Invoke(actionWrapper));
 
-    private void ExecuteAllHandlers(FluxorActionWrapper<TAction> actionWrapper)
-    {
-        foreach (var handler in _handlers)
-            handler.Invoke(actionWrapper);
-    }
+    private void ExecuteAllSyncHandlers(FluxorActionWrapper<TAction> actionWrapper) =>
+        _syncHandlers.ForEach(syncHandler => syncHandler.Invoke(actionWrapper));
+
+    private Task ExecuteAllAsyncHandlers(FluxorActionWrapper<TAction> actionWrapper) =>
+        Task.WhenAll(_asyncHandlers.Select(asyncHandler => asyncHandler.Invoke(actionWrapper)));
 
     #endregion
 }

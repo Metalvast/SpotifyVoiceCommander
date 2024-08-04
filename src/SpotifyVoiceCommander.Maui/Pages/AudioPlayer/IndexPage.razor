@@ -1,7 +1,7 @@
-﻿@inherits SvcComponentFluxorBase
+﻿@using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Components
 
-<div class="page">
-    <MudButton OnClick="Start">
-       Start
-   </MudButton>
+@inherits SvcFluxorComponentBase
+
+<div class="w-100 h-100">
+   <SpeechRecognizerListner StartRecognizerImmediately="StartRecognizerImmediately"/>
 </div>

@@ -3,10 +3,10 @@ using IdentityModel.OidcClient.Browser;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Http;
 using SpotifyVoiceCommander.Maui.Shared.Api.Lib;
+using SpotifyVoiceCommander.Maui.Shared.Lib.AuthenticationStateProvider;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Web;
-using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
 using LoginRequest = SpotifyAPI.Web.LoginRequest;
 
 namespace SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
@@ -14,7 +14,8 @@ namespace SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
 public sealed class SpotifyClientWrapper(
     InternalApiAuthenticator _internalApiAuthenticator,
     SpotifyClientHttpMessageHandler _spotifyClientHttpMessageHandler)
-    : INeedInitialization
+    : INeedInitialization,
+    IDisposable
 {
     #region Const
 
@@ -25,8 +26,8 @@ public sealed class SpotifyClientWrapper(
     #region Fields
 
     private SpotifyClient? _spotifyClient;
-    private readonly IBrowser _authenticationBrowser = new WebAuthenticatorBrowser();
-    private readonly OAuthClient _oAuthClient = new();
+    private WebAuthenticatorBrowser _authenticationBrowser = new();
+    private OAuthClient _oAuthClient = new();
     private PKCEAuthenticator? _pkceAuthenticator;
 
     #endregion
@@ -58,8 +59,8 @@ public sealed class SpotifyClientWrapper(
     public async Task<ErrorOr<Success>> SignInAsync(CancellationToken ct = default)
     {
         var (verifier, challenge) = PKCEUtil.GenerateCodes(120);
-        var loginUrl = CreateLoginUrl(challenge);
-        var callbackUrl = CreateCallbackUrl();
+        var loginUrl = CreateLoginUri(challenge);
+        var callbackUrl = CreateCallbackUri();
 
         var browserAuthenticationResult = await _authenticationBrowser.InvokeAsync(new BrowserOptions(loginUrl, callbackUrl), ct);
         if (browserAuthenticationResult.IsError)
@@ -96,6 +97,21 @@ public sealed class SpotifyClientWrapper(
         OnAuthenticationStateChanged?.Invoke(AnonymousUser);
     }
 
+    public void Dispose()
+    {
+        _internalApiAuthenticator.Clear();
+        
+        if (_pkceAuthenticator != null)
+        {
+            _pkceAuthenticator.TokenRefreshed -= OnTokenRefreshed;
+            _pkceAuthenticator = null;
+        }
+
+        _spotifyClient = null;
+        _authenticationBrowser = null!;
+        _oAuthClient = null!;   
+    }
+
     #region External events
 
     private void OnTokenRefreshed(object? _, PKCETokenResponse authInfo) =>
@@ -105,9 +121,9 @@ public sealed class SpotifyClientWrapper(
 
     #region Private methods
 
-    private static string CreateLoginUrl(string challenge) =>
+    private static string CreateLoginUri(string challenge) =>
         new LoginRequest(
-            new Uri(CreateCallbackUrl()),
+            new Uri(CreateCallbackUri()),
             Constants.SpotifyClientId,
             LoginRequest.ResponseType.Code)
         {
@@ -137,7 +153,7 @@ public sealed class SpotifyClientWrapper(
             ],
         }.ToUri().ToString();
 
-    private static string CreateCallbackUrl() =>
+    private static string CreateCallbackUri() =>
         "spotifyvoicecommanderapp://callback/";
 
     private static Task SetAuthInfo(PKCETokenResponse authInfo) =>

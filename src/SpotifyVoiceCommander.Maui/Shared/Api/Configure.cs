@@ -8,10 +8,11 @@ internal static class Configure
 {
     public static IServiceCollection AddInternalApi(this IServiceCollection services) =>
         services
+            .AddSingleton<InternalApiUrlMapper>()
             .AddScoped<InternalApiAuthenticator>()
             .AddHttpClient(nameof(HttpEndpointsClient), (services, httpClient) =>
             {
-                var backendUrlMapper = services.GetRequiredService<BackendUrlMapper>();
+                var backendUrlMapper = services.GetRequiredService<InternalApiUrlMapper>();
                 httpClient.BaseAddress = new Uri(backendUrlMapper.ApiBaseUrl);
             })
             .Services

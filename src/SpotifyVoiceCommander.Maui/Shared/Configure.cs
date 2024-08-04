@@ -2,8 +2,14 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using SpotifyVoiceCommander.Maui.Shared.Api;
-using SpotifyVoiceCommander.Maui.Shared.Framework;
+using SpotifyVoiceCommander.Maui.Shared.Api.Lib;
+using SpotifyVoiceCommander.Maui.Shared.Lib.AudioManager;
+using SpotifyVoiceCommander.Maui.Shared.Lib.AuthenticationStateProvider;
+using SpotifyVoiceCommander.Maui.Shared.Lib.BeepManager;
 using SpotifyVoiceCommander.Maui.Shared.Lib.Etai;
+using SpotifyVoiceCommander.Maui.Shared.Lib.Maui;
+using SpotifyVoiceCommander.Maui.Shared.Lib.Maui.AppRestarter;
+using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 using SpotifyVoiceCommander.Maui.Shared.Lib.SpotifyWeb;
 using System.Reflection;
 
@@ -15,42 +21,21 @@ internal static class Configure
         this IServiceCollection services,
         IConfiguration configuration,
         Assembly hostAssembly,
-        Assembly[] additionalAssemblies)
-    {
-        var fullTargetAssemblies = additionalAssemblies.Append(hostAssembly).ToArray();
-
-        services.AddSingleton<BackendUrlMapper>();
-
-        // API
+        Assembly[] additionalAssemblies) =>
         services
+            // Api
             .AddInternalApi()
-            .AddSpotifyClientWrapper();
-
-        // Blazor
-
-        // Authentication
-        services
-           .AddAuthorizationCore()
-           .AddScoped<AuthenticationStateProvider, MauiAuthenticationStateProvider>()
-           .AddScoped(sp => (MauiAuthenticationStateProvider)sp.GetRequiredService<AuthenticationStateProvider>());
-
-        // CircuitContext
-        services
-            .AddScoped(c => new MauiBlazorCircuitContext(c))
-            .AddTransient(c => (BlazorCircuitContext)c.GetRequiredService<MauiBlazorCircuitContext>())
-            .AddTransient(c => c.GetRequiredService<MauiBlazorCircuitContext>().Dispatcher);
-
-        // Other Blazor services
-
-        services.AddScoped<MauiBlazorNavigationManager>();
-
-        // UI
-        services
+            .AddSpotifyClientWrapper()
+            // Blazor
+            .AddSvcAuthenticationStateProvider()
+            .AddSvcNavigationManager()
+            // Maui
+            .AddMauiServices()
+            // Audio services
+            .AddBeepManager()
+            .AddAdditionalAudioServices()
+            // Store
+            .AddFluxorServices(hostAssembly, additionalAssemblies)
+            // UI
             .AddEtaiServicesWithConfiguration();
-
-        // Other
-        services.AddFluxorServices(hostAssembly, additionalAssemblies);
-
-        return services;
-    }
 }

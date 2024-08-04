@@ -1,8 +1,10 @@
-﻿using SpotifyVoiceCommander.Maui.Entities.AudioPlayer.Store.Actions;
+﻿using Microsoft.Extensions.Logging;
+using SpotifyVoiceCommander.Maui.Entities.AudioPlayer.Store.Actions;
 using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Models;
 using SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store.Actions;
 using SpotifyVoiceCommander.Shared.Models.AnalyzeSpeech;
 using SpotifyVoiceCommander.Shared.Models.RecognizeSpeech;
+using System.Text.RegularExpressions;
 
 namespace SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store.Effects;
 
@@ -30,9 +32,12 @@ internal class RecognizeSpeechEffect(IServiceProvider _services) : BaseEffect<Re
         {
             Result = analyzeResponse.Result,
         }))
-        .ThenDo(analyzeResponse => Dispatch(new FindAndPlayTrackAction
+        .Then(analyzeResponse => analyzeResponse.Result.Alternatives[0].Message.Text)
+        .Then(trackName => Regex.Replace(trackName, @"[\«\»]+", ""))
+        .ThenDo(trackName => _logger.LogDebug("Analyze result: {Result}", trackName))
+        .ThenDo(trackName => Dispatch(new FindAndPlayTrackAction
         {
-            TrackFullName = analyzeResponse.Result.Alternatives[0].Message.Text,
+            TrackFullName = trackName,
         }))
         .Else(errors => HandleErrorState(
             errors,

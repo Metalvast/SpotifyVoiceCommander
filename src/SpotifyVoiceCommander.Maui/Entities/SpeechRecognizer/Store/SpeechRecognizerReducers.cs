@@ -5,20 +5,59 @@ namespace SpotifyVoiceCommander.Maui.Entities.SpeechRecognizer.Store;
 internal static class SpeechRecognizerReducers
 {
     [ReducerMethod]
-    public static SpeechRecognizerState Reduce(
+    public static SpeechRecognizerState ReduceInitializeSpeechRecognizerAction(
         SpeechRecognizerState state,
-        FluxorActionWrapper<StartSpeechRecordingSuccessAction> _) =>
+        FluxorActionWrapper<InitializeSpeechRecognizerAction> _) =>
         state with
         {
-            IsBusy = true,
+            InitializingState = LoaderState.Loading,
+            AudioRecorder = SvcErrors.NotInitialized,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState ReduceInitializeSpeechRecognizerFailureAction(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<InitializeSpeechRecognizerFailureAction> _) =>
+        state with
+        {
+            InitializingState = LoaderState.Error,
+            AudioRecorder = SvcErrors.InitializationFailed,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState ReduceInitializeSpeechRecognizerSuccessAction(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<InitializeSpeechRecognizerSuccessAction> actionWrapper) =>
+        state with
+        {
+            InitializingState = LoaderState.Content,
+            AudioRecorder = actionWrapper.Action.AudioRecorder.ToErrorOr(),
         };
 
     [ReducerMethod]
     public static SpeechRecognizerState Reduce(
         SpeechRecognizerState state,
-        FluxorActionWrapper<StopSpeechRecordingSuccessAction> _) =>
+        FluxorActionWrapper<StartSpeechRecordingSuccessAction> _) =>
         state with
         {
-            IsBusy = false,
+            IsTryingRecognize = true,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState Reduce(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<RecognizeSpeechFailureAction> _) =>
+        state with
+        {
+            IsTryingRecognize = false,
+        };
+
+    [ReducerMethod]
+    public static SpeechRecognizerState Reduce(
+        SpeechRecognizerState state,
+        FluxorActionWrapper<RecognizeSpeechSuccessAction> _) =>
+        state with
+        {
+            IsTryingRecognize = false,
         };
 }

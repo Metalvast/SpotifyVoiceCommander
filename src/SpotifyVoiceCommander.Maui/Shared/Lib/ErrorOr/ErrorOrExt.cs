@@ -5,6 +5,8 @@ public static class ErrorOrExt
     public static TValue Unwrap<TValue>(this ErrorOr<TValue> errorOr) =>
         errorOr.Value;
 
+    #region FailIf
+
     public static ErrorOr<TValue> FailIf<TValue>(
         this ErrorOr<TValue> wrapper,
         Func<TValue, bool> onValue,
@@ -54,4 +56,6 @@ public static class ErrorOrExt
 
         return await result.FailIfAsync(onValue, errorBuilder);
     }
+
+    #endregion
 }

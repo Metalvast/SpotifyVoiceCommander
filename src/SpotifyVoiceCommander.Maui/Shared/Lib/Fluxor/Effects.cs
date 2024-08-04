@@ -2,8 +2,9 @@
 using Microsoft.Extensions.Logging;
 using MudBlazor;
 using SpotifyVoiceCommander.Maui.Shared.Api.Shell;
-using SpotifyVoiceCommander.Maui.Shared.Framework;
+using SpotifyVoiceCommander.Maui.Shared.Lib.AuthenticationStateProvider;
 using SpotifyVoiceCommander.Maui.Shared.Lib.MudBlazor;
+using SpotifyVoiceCommander.Maui.Shared.Lib.NavigationManager;
 
 namespace SpotifyVoiceCommander.Maui.Shared.Lib.Fluxor;
 
@@ -33,13 +34,13 @@ public abstract class BaseEffect<TAction> : Effect<FluxorActionWrapper<TAction>>
 
 
 
-    private MauiAuthenticationStateProvider? c_authenticationStateProvider;
-    protected MauiAuthenticationStateProvider _authenticationStateProvider =>
-        c_authenticationStateProvider ??= _services.GetRequiredService<MauiAuthenticationStateProvider>();
+    private SvcAuthenticationStateProvider? c_authenticationStateProvider;
+    protected SvcAuthenticationStateProvider _authenticationStateProvider =>
+        c_authenticationStateProvider ??= _services.GetRequiredService<SvcAuthenticationStateProvider>();
 
-    private MauiBlazorNavigationManager? c_navigationManager;
-    protected MauiBlazorNavigationManager _navigationManager =>
-        c_navigationManager ??= _services.GetRequiredService<MauiBlazorNavigationManager>();
+    private SvcNavigationManager? c_navigationManager;
+    protected SvcNavigationManager _navigationManager =>
+        c_navigationManager ??= _services.GetRequiredService<SvcNavigationManager>();
 
 
 
